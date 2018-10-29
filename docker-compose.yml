@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  djangoapp:
+    build: .
+    volumes:
+      - .:/opt/services/d20/src
+      - static_volume:/opt/services/d20/static
+      - media_volume:/opt/services/d20/media
+    networks:
+      - nginx_network
+      - db_network
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/opt/services/d20/static
+      - media_volume:/opt/services/d20/media
+    depends_on:
+      - djangoapp
+    networks:
+      - nginx_network
+
+  db:
+    image: postgres
+    env_file:
+      - config/db/db_env
+    networks:
+      - db_network
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+
+networks:
+  nginx_network:
+    driver: bridge
+  db_network:
+    driver: bridge
+
+volumes:
+  db_volume:
+  static_volume:
+  media_volume:

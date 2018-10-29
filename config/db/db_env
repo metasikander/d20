@@ -1,0 +1,3 @@
+POSTGRES_USER=u_mimir
+POSTGRES_PASSWORD=ievtdlijcfvkrifigceiunvujnhglgintflthj
+POSTGRES_DB=mimirdb
